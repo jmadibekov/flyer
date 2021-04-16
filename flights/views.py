@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import requests, json
+import asyncio
 
 API = 'https://tequila-api.kiwi.com/v2/search'
 API_KEY = 'A5VqFeOZvXoOfy5zY19vBuWO4b4TJL23'
@@ -20,3 +21,7 @@ def index(request):
     json_data = response.json()
     print(f'Status code is {response.status_code}')
     return JsonResponse(json_data)
+
+async def index_async(request):
+    await asyncio.sleep(5)
+    return HttpResponse('Made a pretty page asynchronously!')
