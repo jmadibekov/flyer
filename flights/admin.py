@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Flight
+
+@admin.register(Flight)
+class FlightAdmin(admin.ModelAdmin):
+    list_display = ('fly_from', 'fly_to', 'price', 'date_time')

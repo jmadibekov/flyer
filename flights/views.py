@@ -21,7 +21,3 @@ def index(request):
     json_data = response.json()
     print(f'Status code is {response.status_code}')
     return JsonResponse(json_data)
-
-async def index_async(request):
-    await asyncio.sleep(5)
-    return HttpResponse('Made a pretty page asynchronously!')
