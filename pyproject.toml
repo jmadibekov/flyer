@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "flyer"
+version = "0.1.0"
+description = "Price list for the common flights!"
+authors = ["Nurbakyt Madibek <madibekov.nurbakhyt@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^3.2"
+ipython = "^7.22.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
