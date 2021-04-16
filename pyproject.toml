@@ -8,6 +8,7 @@ authors = ["Nurbakyt Madibek <madibekov.nurbakhyt@gmail.com>"]
 python = "^3.9"
 Django = "^3.2"
 ipython = "^7.22.0"
+requests = "^2.25.1"
 
 [tool.poetry.dev-dependencies]
 
