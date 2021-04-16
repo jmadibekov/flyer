@@ -14,7 +14,7 @@ class Flight(models.Model):
     booking_token = models.CharField(max_length=1000)
 
     # last_fetched is when used Search API to search for the flight
-    last_fetched = models.DateTimeField()
+    last_fetched = models.DateTimeField(auto_now_add=True)
 
     # last_updated is when used Booking API to check the flight
     last_updated = models.DateTimeField(auto_now=True)
