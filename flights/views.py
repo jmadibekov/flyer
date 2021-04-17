@@ -7,6 +7,7 @@ from datetime import timedelta, datetime
 import maya
 from rest_framework import viewsets
 from .serializers import FlightSerializer, DateSerializer
+from enum import Enum
 
 API = "https://tequila-api.kiwi.com/v2/search"
 API_KEY = "A5VqFeOZvXoOfy5zY19vBuWO4b4TJL23"
@@ -21,20 +22,38 @@ DATE_TO_STR = DATE_TO.strftime("%d/%m/%Y")
 LIMIT = 5000
 
 
-ROUTES = [
-    {
-        "fly_from": "ALA",
-        "fly_to": "TSE",
-    },
-    # {
-    #     "fly_from": "TSE",
-    #     "fly_to": "ALA",
-    # },
-    # {
-    #     "fly_from": "TSE",
-    #     "fly_to": "LED",
-    # },
-]
+class CityCode(Enum):
+    ALA = "Almaty"
+    TSE = "Nur-Sultan"
+    MOW = "Moscow"
+    CIT = "Shymkent"
+    LED = "Saint Petersburg"
+
+
+# most common routes
+def common_routes():
+    routes = [
+        (CityCode.ALA, CityCode.TSE),
+        (CityCode.ALA, CityCode.MOW),
+        (CityCode.ALA, CityCode.CIT),
+        (CityCode.TSE, CityCode.MOW),
+        (CityCode.TSE, CityCode.LED),
+    ]
+    list_routes = []
+    for route in routes:
+        list_routes.extend(
+            [
+                {
+                    "fly_from": route[0].name,
+                    "fly_to": route[1].name,
+                },
+                {
+                    "fly_from": route[1].name,
+                    "fly_to": route[0].name,
+                },
+            ]
+        )
+    return list_routes
 
 
 def flights_for_route(fly_from, fly_to):
@@ -58,7 +77,7 @@ def fetch_flights():
     Flight.objects.all().delete()
     Date.objects.all().delete()
 
-    for route in ROUTES:
+    for route in common_routes():
         fly_from, fly_to = route["fly_from"], route["fly_to"]
         flights = flights_for_route(fly_from, fly_to)
 
