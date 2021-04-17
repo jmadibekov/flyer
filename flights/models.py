@@ -1,6 +1,16 @@
 from django.db import models
 
 
+class Date(models.Model):
+    date = models.DateField(unique=True)
+
+    class Meta:
+        ordering = ["date"]
+
+    def __str__(self):
+        return f'{self.date.strftime("%d %b, %Y")}'
+
+
 class Flight(models.Model):
     # both of the following contain the respective city codes
     fly_from = models.CharField(max_length=10)
@@ -23,6 +33,8 @@ class Flight(models.Model):
 
     # deep_link is a hyperlink which links a customer to Kiwi.com website
     deep_link = models.URLField(max_length=500)
+
+    date = models.ForeignKey(Date, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["price"]

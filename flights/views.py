@@ -1,16 +1,17 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 import requests, json
-from .models import Flight
+from .models import Flight, Date
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
+import maya
 
 API = "https://tequila-api.kiwi.com/v2/search"
 API_KEY = "A5VqFeOZvXoOfy5zY19vBuWO4b4TJL23"
 DATE_FROM = timezone.now()
 DATE_FROM_STR = DATE_FROM.strftime("%d/%m/%Y")
 
-INTERVAL = timedelta(days=10)
+INTERVAL = timedelta(days=3)
 
 DATE_TO = DATE_FROM + INTERVAL
 DATE_TO_STR = DATE_TO.strftime("%d/%m/%Y")
@@ -58,6 +59,11 @@ def fetch_flights():
         print(f"{route=} has {len(flights)} flights")
 
         for flight in flights:
+            cur_datetime = maya.parse(flight["utc_departure"]).datetime()
+            local_datetime = cur_datetime.astimezone(timezone.get_current_timezone())
+
+            date, _ = Date.objects.get_or_create(date=local_datetime.date())
+
             Flight.objects.create(
                 fly_from=fly_from,
                 fly_to=fly_to,
@@ -66,6 +72,7 @@ def fetch_flights():
                 utc_departure=flight["utc_departure"],
                 utc_arrival=flight["utc_arrival"],
                 deep_link=flight["deep_link"],
+                date=date,
             )
 
 
