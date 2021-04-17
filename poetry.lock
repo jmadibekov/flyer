@@ -130,6 +130,17 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "djangorestframework"
+version = "3.12.4"
+description = "Web APIs for Django, made easy."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.dependencies]
+django = ">=2.2"
+
+[[package]]
 name = "humanize"
 version = "3.4.1"
 description = "Python humanize utilities"
@@ -458,7 +469,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "9a7a5bbbdb6be308d8eedd7581e05c7ba3aa52e02e208e1e8e8c0edbc65ba9b8"
+content-hash = "9521b02c4acec8eee0d3872bfd8f4cc6b5de978b125fb7a05b7c2b440f30f581"
 
 [metadata.files]
 appdirs = [
@@ -507,6 +518,10 @@ decorator = [
 django = [
     {file = "Django-3.2-py3-none-any.whl", hash = "sha256:0604e84c4fb698a5e53e5857b5aea945b2f19a18f25f10b8748dbdf935788927"},
     {file = "Django-3.2.tar.gz", hash = "sha256:21f0f9643722675976004eb683c55d33c05486f94506672df3d6a141546f389d"},
+]
+djangorestframework = [
+    {file = "djangorestframework-3.12.4-py3-none-any.whl", hash = "sha256:6d1d59f623a5ad0509fe0d6bfe93cbdfe17b8116ebc8eda86d45f6e16e819aaf"},
+    {file = "djangorestframework-3.12.4.tar.gz", hash = "sha256:f747949a8ddac876e879190df194b925c177cdeb725a099db1460872f7c0a7f2"},
 ]
 humanize = [
     {file = "humanize-3.4.1-py3-none-any.whl", hash = "sha256:c2ccaea7f8cbcd883ec420279d6e71ad20371bb36dbf5100b178d9756563289e"},
