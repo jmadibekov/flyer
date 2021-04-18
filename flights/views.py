@@ -1,13 +1,14 @@
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
-import requests, json
-from .models import Flight, Date
-from django.utils import timezone
-from datetime import timedelta, datetime
-import maya
-from rest_framework import viewsets
-from .serializers import FlightSerializer, DateSerializer
+from datetime import timedelta
 from enum import Enum
+
+import maya
+import requests
+from django.http import JsonResponse
+from django.utils import timezone
+from rest_framework import viewsets
+
+from .models import Date, Flight
+from .serializers import DateSerializer, FlightSerializer
 
 API = "https://tequila-api.kiwi.com/v2/search"
 API_KEY = "A5VqFeOZvXoOfy5zY19vBuWO4b4TJL23"
@@ -56,6 +57,9 @@ def common_routes():
     return list_routes
 
 
+ROUTES = common_routes()
+
+
 def flights_for_route(fly_from, fly_to):
     response = requests.get(
         API,
@@ -77,7 +81,7 @@ def fetch_flights():
     Flight.objects.all().delete()
     Date.objects.all().delete()
 
-    for route in common_routes():
+    for route in ROUTES:
         fly_from, fly_to = route["fly_from"], route["fly_to"]
         flights = flights_for_route(fly_from, fly_to)
 
