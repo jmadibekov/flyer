@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Flight, Date
+
+from .models import Date, Flight
 
 
 class FlightSerializer(serializers.ModelSerializer):
@@ -16,11 +17,11 @@ class DateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_cheapest_flights(self, obj):
-        from .views import common_routes
+        from .views import ROUTES
 
         cheapest_flights = []
 
-        for route in common_routes():
+        for route in ROUTES:
             fly_from, fly_to = route["fly_from"], route["fly_to"]
             try:
                 flight = obj.flight_set.filter(
