@@ -1,21 +1,30 @@
+import time
 from datetime import timedelta
 from enum import Enum
 
 import maya
 import requests
-from django.http import JsonResponse
+from celery import shared_task
 from django.utils import timezone
-from rest_framework import viewsets
 
 from .models import Date, Flight
-from .serializers import DateSerializer, FlightSerializer
+
+
+@shared_task
+def sample_task(sleep_secs):
+    time.sleep(int(sleep_secs))
+    print(f"Why, I've slept for {sleep_secs} seconds!")
+    return True
+
+
+# --------------
 
 API = "https://tequila-api.kiwi.com/v2/search"
 API_KEY = "A5VqFeOZvXoOfy5zY19vBuWO4b4TJL23"
 DATE_FROM = timezone.now()
 DATE_FROM_STR = DATE_FROM.strftime("%d/%m/%Y")
 
-INTERVAL = timedelta(days=30)
+INTERVAL = timedelta(days=3)
 
 DATE_TO = DATE_FROM + INTERVAL
 DATE_TO_STR = DATE_TO.strftime("%d/%m/%Y")
@@ -35,10 +44,10 @@ class CityCode(Enum):
 def common_routes():
     routes = [
         (CityCode.ALA, CityCode.TSE),
-        (CityCode.ALA, CityCode.MOW),
-        (CityCode.ALA, CityCode.CIT),
-        (CityCode.TSE, CityCode.MOW),
-        (CityCode.TSE, CityCode.LED),
+        # (CityCode.ALA, CityCode.MOW),
+        # (CityCode.ALA, CityCode.CIT),
+        # (CityCode.TSE, CityCode.MOW),
+        # (CityCode.TSE, CityCode.LED),
     ]
     list_routes = []
     for route in routes:
@@ -60,32 +69,37 @@ def common_routes():
 ROUTES = common_routes()
 
 
-def flights_for_route(fly_from, fly_to):
+def request_flights(fly_from, fly_to, date_from, date_to):
     response = requests.get(
         API,
         params={
             "fly_from": fly_from,
             "fly_to": fly_to,
-            "date_from": DATE_FROM_STR,
-            "date_to": DATE_TO_STR,
+            "date_from": date_from,
+            "date_to": date_to,
             "limit": LIMIT,
         },
         headers={"apikey": API_KEY},
     )
-    json_response = response.json()
-    return json_response["data"]
+    return response.json()
 
 
+@shared_task
 def fetch_flights():
-    # fetch from scratch, so clear the db
+    # fetch from scratch, so clearing the db first
+    print("Celery worker started the task [fetch_flights].")
+    print("Flushing the DB.")
     Flight.objects.all().delete()
     Date.objects.all().delete()
 
+    print(
+        f"Requesting flight info from external API from {DATE_FROM_STR} to {DATE_TO_STR}."
+    )
     for route in ROUTES:
         fly_from, fly_to = route["fly_from"], route["fly_to"]
-        flights = flights_for_route(fly_from, fly_to)
+        flights = request_flights(fly_from, fly_to, DATE_FROM_STR, DATE_TO_STR)["data"]
 
-        print(f"{route=} has {len(flights)} flights")
+        print(f"Route [{fly_from} -> {fly_to}] has {len(flights)} flights.")
 
         for flight in flights:
             cur_datetime = maya.parse(flight["utc_departure"]).datetime()
@@ -103,30 +117,3 @@ def fetch_flights():
                 deep_link=flight["deep_link"],
                 date=date,
             )
-
-
-def sample_fetch(request):
-    response = requests.get(
-        API,
-        params={
-            "fly_from": "ALA",
-            "fly_to": "TSE",
-            # just a one day interval, for simplicity
-            "date_from": DATE_FROM_STR,
-            "date_to": DATE_FROM_STR,
-        },
-        headers={"apikey": API_KEY},
-    )
-    json_data = response.json()
-    print(f"Status code is {response.status_code}")
-    return JsonResponse(json_data)
-
-
-class FlightViewSet(viewsets.ModelViewSet):
-    queryset = Flight.objects.all()
-    serializer_class = FlightSerializer
-
-
-class DateViewSet(viewsets.ModelViewSet):
-    queryset = Date.objects.all()
-    serializer_class = DateSerializer

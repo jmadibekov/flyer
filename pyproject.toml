@@ -12,6 +12,12 @@ requests = "^2.25.1"
 maya = "^0.6.1"
 djangorestframework = "^3.12.4"
 pre-commit = "^2.12.1"
+pytest = "^6.2.3"
+pytest-django = "^4.2.0"
+# flower doesn't yet support celery v5+, thus using 4.4.7
+celery = "^4.4.7"
+redis = "^3.5.3"
+flower = "^0.9.7"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^20.8b1", allow-prereleases = true}

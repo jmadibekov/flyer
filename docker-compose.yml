@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  web:
+    build: ./flyer
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./flyer/:/usr/src/app/
+    ports:
+      - 1337:8000
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django_insecure
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+
+  celery:
+    build: ./flyer
+    command: celery --app=flyer worker -l INFO
+    volumes:
+      - ./flyer/:/usr/src/app/
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django_insecure
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    depends_on:
+      - web
+      - redis
+
+  dashboard:
+    build: ./flyer
+    command: flower -A flyer --port=5555 --broker=redis://redis:6379/0
+    ports:
+      - 5555:5555
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django_insecure
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    depends_on:
+      - web
+      - redis
+      - celery
+
+  redis:
+    image: redis:5-alpine
