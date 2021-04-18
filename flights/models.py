@@ -4,11 +4,11 @@ from django.db import models
 class Date(models.Model):
     date = models.DateField(unique=True)
 
-    class Meta:
-        ordering = ["date"]
-
     def __str__(self):
         return f'{self.date.strftime("%d %b, %Y")}'
+
+    class Meta:
+        ordering = ["date"]
 
 
 class Flight(models.Model):
