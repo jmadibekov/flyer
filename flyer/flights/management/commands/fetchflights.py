@@ -1,5 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
-from flights.models import Flight
+from django.core.management.base import BaseCommand
 from flights.views import fetch_flights
 
 

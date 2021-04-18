@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Flight, Date
+from .models import Date, Flight
 
 
 @admin.register(Flight)
@@ -11,11 +11,7 @@ class FlightAdmin(admin.ModelAdmin):
 
 class FlightInline(admin.TabularInline):
     model = Flight
-    fields = (
-        "fly_from",
-        "fly_to",
-        "price",
-    )
+    fields = ("fly_from", "fly_to", "price")
     max_num = 10
     extra = 0
 
