@@ -140,3 +140,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Celery settings
 CELERY_BROKER_URL = "redis://redis:6379/0"
 CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+# Celery actually uses Django's USE_TZ setting, but the following is required
+# for the flower to be in local timezone
+CELERY_TIMEZONE = "Asia/Almaty"
