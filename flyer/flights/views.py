@@ -3,6 +3,7 @@ from enum import Enum
 
 import maya
 import requests
+from celery.result import AsyncResult
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -144,3 +145,14 @@ def run_sample_task(request):
         sleep_secs = request.POST.get("secs")
         task = sample_task.delay(int(sleep_secs))
         return JsonResponse({"task_id": task.id}, status=202)
+
+
+@csrf_exempt
+def get_status(request, task_id):
+    task_result = AsyncResult(task_id)
+    result = {
+        "task_id": task_id,
+        "task_status": task_result.status,
+        "task_result": task_result.result,
+    }
+    return JsonResponse(result, status=200)
