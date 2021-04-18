@@ -3,7 +3,8 @@ from flights import tasks
 
 
 class Command(BaseCommand):
-    help = "Fetch the price list for flights from external API and populate the DB from scratch."
+    help = "Fetch the price list for flights from external API and populate \
+    the DB from scratch."
 
     def handle(self, *args, **options):
         task = tasks.fetch_flights.delay()
