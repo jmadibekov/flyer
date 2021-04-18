@@ -15,12 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from flights.views import get_status, home, run_sample_task
 
 urlpatterns = [
-    path("", home, name="home"),
     path("admin/", admin.site.urls),
-    path("flights/", include("flights.urls")),
-    path("tasks/sample-task/", run_sample_task, name="run_sample_task"),
-    path("tasks/<task_id>/", get_status, name="get_status"),
+    path("", include("flights.urls")),
 ]

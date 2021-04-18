@@ -13,6 +13,22 @@ from .models import Date, Flight
 from .serializers import DateSerializer, FlightSerializer
 from .tasks import sample_task
 
+# ---------- View Sets For API -----------------
+
+
+class FlightViewSet(viewsets.ModelViewSet):
+    queryset = Flight.objects.all()
+    serializer_class = FlightSerializer
+
+
+class DateViewSet(viewsets.ModelViewSet):
+    queryset = Date.objects.all()
+    serializer_class = DateSerializer
+
+
+# ---------------------------------------------
+
+
 API = "https://tequila-api.kiwi.com/v2/search"
 API_KEY = "A5VqFeOZvXoOfy5zY19vBuWO4b4TJL23"
 DATE_FROM = timezone.now()
@@ -63,20 +79,19 @@ def common_routes():
 ROUTES = common_routes()
 
 
-def flights_for_route(fly_from, fly_to):
+def request_flights(fly_from, fly_to, date_from, date_to):
     response = requests.get(
         API,
         params={
             "fly_from": fly_from,
             "fly_to": fly_to,
-            "date_from": DATE_FROM_STR,
-            "date_to": DATE_TO_STR,
+            "date_from": date_from,
+            "date_to": date_to,
             "limit": LIMIT,
         },
         headers={"apikey": API_KEY},
     )
-    json_response = response.json()
-    return json_response["data"]
+    return response.json()
 
 
 def fetch_flights():
@@ -86,7 +101,7 @@ def fetch_flights():
 
     for route in ROUTES:
         fly_from, fly_to = route["fly_from"], route["fly_to"]
-        flights = flights_for_route(fly_from, fly_to)
+        flights = request_flights(fly_from, fly_to, DATE_FROM_STR, DATE_TO_STR)["data"]
 
         print(f"{route=} has {len(flights)} flights")
 
@@ -108,31 +123,16 @@ def fetch_flights():
             )
 
 
+# ---------- Views -----------------
+
+
 def sample_fetch(request):
-    response = requests.get(
-        API,
-        params={
-            "fly_from": "ALA",
-            "fly_to": "TSE",
-            # just a one day interval, for simplicity
-            "date_from": DATE_FROM_STR,
-            "date_to": DATE_FROM_STR,
-        },
-        headers={"apikey": API_KEY},
+    # just ALA -> TSE with one day interval, for simplicity
+    return JsonResponse(
+        request_flights(
+            CityCode.ALA.name, CityCode.TSE.name, DATE_FROM_STR, DATE_TO_STR
+        )
     )
-    json_data = response.json()
-    print(f"Status code is {response.status_code}")
-    return JsonResponse(json_data)
-
-
-class FlightViewSet(viewsets.ModelViewSet):
-    queryset = Flight.objects.all()
-    serializer_class = FlightSerializer
-
-
-class DateViewSet(viewsets.ModelViewSet):
-    queryset = Date.objects.all()
-    serializer_class = DateSerializer
 
 
 def home(request):
