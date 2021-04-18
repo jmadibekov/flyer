@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand
-from flights.views import fetch_flights
+from flights import tasks
 
 
 class Command(BaseCommand):
-    help = "Fetch the price list for flights from external API and populate the DB from scratch"
+    help = "Fetch the price list for flights from external API and populate the DB from scratch."
 
     def handle(self, *args, **options):
-        self.stdout.write("Starting fetching flight")
-        fetch_flights()
+        task = tasks.fetch_flights.delay()
+        self.stdout.write(f"Success. Created task with task_id: {task.id}")
