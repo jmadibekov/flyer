@@ -12,3 +12,19 @@ services:
       - DEBUG=1
       - SECRET_KEY=django_insecure
       - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+
+  celery:
+    build: ./flyer
+    command: celery --app=flyer worker -l INFO
+    volumes:
+      - ./flyer/:/usr/src/app/
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django_insecure
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    depends_on:
+      - web
+      - redis
+
+  redis:
+    image: redis:5-alpine

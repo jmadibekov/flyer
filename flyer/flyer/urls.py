@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from flights.views import home
+from flights.views import home, run_sample_task
 
 urlpatterns = [
     path("", home, name="home"),
     path("admin/", admin.site.urls),
     path("flights/", include("flights.urls")),
+    path("tasks/sample-task/", run_sample_task, name="run_sample_task"),
 ]

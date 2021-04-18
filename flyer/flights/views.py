@@ -5,10 +5,12 @@ import maya
 import requests
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 
 from .models import Date, Flight
 from .serializers import DateSerializer, FlightSerializer
+from .tasks import sample_task
 
 API = "https://tequila-api.kiwi.com/v2/search"
 API_KEY = "A5VqFeOZvXoOfy5zY19vBuWO4b4TJL23"
@@ -134,3 +136,11 @@ class DateViewSet(viewsets.ModelViewSet):
 
 def home(request):
     return HttpResponse("Why, hello my friend!")
+
+
+@csrf_exempt
+def run_sample_task(request):
+    if request.POST:
+        sleep_secs = request.POST.get("secs")
+        task = sample_task.delay(int(sleep_secs))
+        return JsonResponse({"task_id": task.id}, status=202)
