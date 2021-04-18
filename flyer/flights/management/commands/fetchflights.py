@@ -3,8 +3,8 @@ from flights.views import fetch_flights
 
 
 class Command(BaseCommand):
-    help = "Fetch/update the price list for flights."
+    help = "Fetch the price list for flights from external API and populate the DB from scratch"
 
     def handle(self, *args, **options):
-        print("calling fetch flights")
+        self.stdout.write("Starting fetching flight")
         fetch_flights()
