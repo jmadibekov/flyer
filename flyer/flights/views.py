@@ -3,7 +3,7 @@ from enum import Enum
 
 import maya
 import requests
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from rest_framework import viewsets
 
@@ -130,3 +130,7 @@ class FlightViewSet(viewsets.ModelViewSet):
 class DateViewSet(viewsets.ModelViewSet):
     queryset = Date.objects.all()
     serializer_class = DateSerializer
+
+
+def home(request):
+    return HttpResponse("Why, hello my friend!")
