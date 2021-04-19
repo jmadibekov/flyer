@@ -24,12 +24,17 @@ API_KEY = "A5VqFeOZvXoOfy5zY19vBuWO4b4TJL23"
 DATE_FROM = timezone.now()
 DATE_FROM_STR = DATE_FROM.strftime("%d/%m/%Y")
 
-INTERVAL = timedelta(days=3)
+INTERVAL = timedelta(days=30)
 
 DATE_TO = DATE_FROM + INTERVAL
 DATE_TO_STR = DATE_TO.strftime("%d/%m/%Y")
 
 LIMIT = 5000
+
+
+# for each date and route, I store only up to 50 flights (starting from cheapest);
+# for one, I think that's more than enough; secondly, it'll be faster performance-wise
+MAX_NUM_OF_FLIGHTS_FOR_DAY_PER_ROUTE = 50
 
 
 class CityCode(Enum):
@@ -77,6 +82,8 @@ def request_flights(fly_from, fly_to, date_from, date_to):
             "fly_to": fly_to,
             "date_from": date_from,
             "date_to": date_to,
+            "sort": "price",  # sorted from cheapest
+            "asc": 1,  # to the most expensive
             "limit": LIMIT,
         },
         headers={"apikey": API_KEY},
@@ -93,8 +100,7 @@ def fetch_flights():
     Date.objects.all().delete()
 
     print(
-        f"Requesting flight info from external API \
-            from {DATE_FROM_STR} to {DATE_TO_STR}."
+        f"Requesting flight info from external API from {DATE_FROM_STR} to {DATE_TO_STR}."
     )
 
     for route in ROUTES:
@@ -108,6 +114,17 @@ def fetch_flights():
             local_datetime = cur_datetime.astimezone(timezone.get_current_timezone())
 
             date, _ = Date.objects.get_or_create(date=local_datetime.date())
+
+            num_of_flights = date.flight_set.filter(
+                fly_from=fly_from, fly_to=fly_to
+            ).count()
+
+            # print(
+            #     f'Date {date} [{flight["local_departure"]}] has already {num_of_flights} flights.'
+            # )
+
+            if num_of_flights >= MAX_NUM_OF_FLIGHTS_FOR_DAY_PER_ROUTE:
+                continue
 
             Flight.objects.create(
                 fly_from=fly_from,

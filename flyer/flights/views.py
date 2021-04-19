@@ -39,8 +39,8 @@ def fetch(request):
 
     else:
         return HttpResponse(
-            "Send a post request with empty body to fetch flights \
-            manually (same as calling [python manage.py fetchflights])."
+            "Send a post request with empty body to fetch flights manually (same as calling [python manage.py "
+            "fetchflights]). "
         )
 
 
