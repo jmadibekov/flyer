@@ -46,6 +46,12 @@ decorator==5.0.7; python_version >= "3.7" \
 distlib==0.3.1; python_full_version >= "3.6.1" \
     --hash=sha256:8c09de2c67b3e7deef7184574fc060ab8a793e7adbb183d942c389c8b13c52fb \
     --hash=sha256:edf6116872c863e1aa9d5bb7cb5e05a022c519a4594dc703843343a9ddd9bff1
+django-celery-beat==2.2.0 \
+    --hash=sha256:b8a13afb15e7c53fc04f4f847ac71a6d32088959aba701eb7c4a59f0c28ba543 \
+    --hash=sha256:c4c72a9579f20eff4c4ccf1b58ebdca5ef940f4210065057db1754ea5f8dffdc
+django-timezone-field==4.1.2; python_version >= "3.5" \
+    --hash=sha256:cffac62452d060e365938aa9c9f7b72d70d8b26b9c60243bce227b35abd1b9df \
+    --hash=sha256:897c06e40b619cf5731a30d6c156886a7c64cba3a90364832148da7ef32ccf36
 django==3.2; python_version >= "3.6" \
     --hash=sha256:0604e84c4fb698a5e53e5857b5aea945b2f19a18f25f10b8748dbdf935788927 \
     --hash=sha256:21f0f9643722675976004eb683c55d33c05486f94506672df3d6a141546f389d
@@ -152,6 +158,8 @@ pytest-django==4.2.0; python_version >= "3.5" \
 pytest==6.2.3; python_version >= "3.6" \
     --hash=sha256:6ad9c7bdf517a808242b998ac20063c41532a570d088d77eec1ee12b0b5574bc \
     --hash=sha256:671238a46e4df0f3498d1c3270e5deb9b32d25134c99b7d75370a68cfbe9b634
+python-crontab==2.5.1 \
+    --hash=sha256:4bbe7e720753a132ca4ca9d4094915f40e9d9dc8a807a4564007651018ce8c31
 python-dateutil==2.8.1; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.5" \
     --hash=sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c \
     --hash=sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a
