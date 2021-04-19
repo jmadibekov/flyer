@@ -31,6 +31,19 @@ def sample_fetch(request):
     return JsonResponse(tasks.request_flights("ALA", "TSE", "22/05/2021", "22/05/2021"))
 
 
+def sample_check(request, flight_id):
+    flight = Flight.objects.filter(id=flight_id)
+
+    if flight:
+        return JsonResponse(tasks.update_flight(flight[0]))
+    else:
+        return JsonResponse({"error": "No flight in DB with such flight_id."})
+
+
+def home(request):
+    return HttpResponse("Why, hello my friend!")
+
+
 @csrf_exempt
 def fetch(request):
     if request.method == "POST":
@@ -39,13 +52,21 @@ def fetch(request):
 
     else:
         return HttpResponse(
-            "Send a post request with empty body to fetch flights \
-            manually (same as calling [python manage.py fetchflights])."
+            "Send a post request with empty body to fetch flights manually (same as calling [python manage.py "
+            "fetchflights]). "
         )
 
 
-def home(request):
-    return HttpResponse("Why, hello my friend!")
+@csrf_exempt
+def check(request):
+    if request.method == "POST":
+        task = tasks.check_flights.delay()
+        return JsonResponse({"task_id": task.id}, status=202)
+
+    else:
+        return HttpResponse(
+            "Send a post request to check the status of the flights in DB."
+        )
 
 
 @csrf_exempt
