@@ -249,6 +249,17 @@ django-timezone-field = ">=4.1.0,<5.0"
 python-crontab = ">=2.3.4"
 
 [[package]]
+name = "django-celery-results"
+version = "2.0.1"
+description = "Celery result backends for Django."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+celery = ">=4.4,<6.0"
+
+[[package]]
 name = "django-timezone-field"
 version = "4.1.2"
 description = "A Django app providing database and form fields for pytz timezone objects."
@@ -850,7 +861,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "ab54d21dc04427e852a2bb982ad837f665d8a77455b7e8f4714fc9f84d4245e4"
+content-hash = "6bfce0405e83301321006291ba043143b4a34ddda2cf462a1f1eccbde96a13ea"
 
 [metadata.files]
 amqp = [
@@ -931,6 +942,10 @@ django = [
 django-celery-beat = [
     {file = "django-celery-beat-2.2.0.tar.gz", hash = "sha256:b8a13afb15e7c53fc04f4f847ac71a6d32088959aba701eb7c4a59f0c28ba543"},
     {file = "django_celery_beat-2.2.0-py2.py3-none-any.whl", hash = "sha256:c4c72a9579f20eff4c4ccf1b58ebdca5ef940f4210065057db1754ea5f8dffdc"},
+]
+django-celery-results = [
+    {file = "django_celery_results-2.0.1-py2.py3-none-any.whl", hash = "sha256:a2f7d172f7f57dd972538acc6e80a5bf50c673fb4d82fe027189c8659c60dfce"},
+    {file = "django_celery_results-2.0.1.tar.gz", hash = "sha256:d625e324138e5b2ef46ffa9e89fa353c16d619420066ac8b240ef9247b293a84"},
 ]
 django-timezone-field = [
     {file = "django-timezone-field-4.1.2.tar.gz", hash = "sha256:cffac62452d060e365938aa9c9f7b72d70d8b26b9c60243bce227b35abd1b9df"},

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # external
     "rest_framework",
     "django_celery_beat",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -148,13 +149,15 @@ CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 # for the flower to be in local timezone
 CELERY_TIMEZONE = "Asia/Almaty"
 
+CELERY_RESULT_BACKEND = "django-db"
+
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
-        "task": "flights.tasks.sample_task",
-        "schedule": crontab(minute="*/1"),  # execute every minute
-        "args": (10,),  # 10 secs
-    },
+    # "sample_task": {
+    #     "task": "flights.tasks.sample_task",
+    #     "schedule": crontab(minute="*/1"),  # execute every minute
+    #     "args": (10,),  # 10 secs
+    # },
     "fetch_flights": {
         "task": "flights.tasks.fetch_flights",
         "schedule": crontab(minute=0, hour=0),  # execute daily at midnight
