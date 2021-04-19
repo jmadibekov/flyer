@@ -31,6 +31,16 @@ def sample_fetch(request):
     return JsonResponse(tasks.request_flights("ALA", "TSE", "22/05/2021", "22/05/2021"))
 
 
+def sample_check(request):
+    # first flight is checked only, for simplicity
+    # note that, this function would raise an exception if there is no flights in DB!
+    return JsonResponse(tasks.update_flight(Flight.objects.all()[0]))
+
+
+def home(request):
+    return HttpResponse("Why, hello my friend!")
+
+
 @csrf_exempt
 def fetch(request):
     if request.method == "POST":
@@ -44,8 +54,16 @@ def fetch(request):
         )
 
 
-def home(request):
-    return HttpResponse("Why, hello my friend!")
+@csrf_exempt
+def check(request):
+    if request.method == "POST":
+        task = tasks.check_flights.delay()
+        return JsonResponse({"task_id": task.id}, status=202)
+
+    else:
+        return HttpResponse(
+            "Send a post request to check the status of the flights in DB."
+        )
 
 
 @csrf_exempt
