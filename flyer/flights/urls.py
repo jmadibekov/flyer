@@ -13,7 +13,7 @@ urlpatterns = [
     path("api/", include(router.urls)),
     # sample api request done in sync
     path("sample-fetch/", views.sample_fetch, name="sample_fetch"),
-    path("sample-check/", views.sample_check, name="sample_check"),
+    path("sample-check/<flight_id>/", views.sample_check, name="sample_check"),
     # url endpoint to create async tasks, respectively
     path("fetch/", views.fetch, name="fetch"),
     path("check/", views.check, name="check"),

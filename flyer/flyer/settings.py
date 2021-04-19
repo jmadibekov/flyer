@@ -143,7 +143,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery settings
 CELERY_BROKER_URL = "redis://redis:6379/0"
-CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+# CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 
 # Celery actually uses Django's USE_TZ setting, but the following is required
 # for the flower to be in local timezone
@@ -161,6 +161,10 @@ CELERY_BEAT_SCHEDULE = {
     "fetch_flights": {
         "task": "flights.tasks.fetch_flights",
         "schedule": crontab(minute=0, hour=0),  # execute daily at midnight
+    },
+    "check_flights": {
+        "task": "flights.tasks.check_flights",
+        "schedule": crontab(minute=0, hour="*/3"),  # execute every three hours
     },
 }
 

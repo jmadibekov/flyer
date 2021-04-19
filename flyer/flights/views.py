@@ -31,10 +31,13 @@ def sample_fetch(request):
     return JsonResponse(tasks.request_flights("ALA", "TSE", "22/05/2021", "22/05/2021"))
 
 
-def sample_check(request):
-    # first flight is checked only, for simplicity
-    # note that, this function would raise an exception if there is no flights in DB!
-    return JsonResponse(tasks.update_flight(Flight.objects.all()[0]))
+def sample_check(request, flight_id):
+    flight = Flight.objects.filter(id=flight_id)
+
+    if flight:
+        return JsonResponse(tasks.update_flight(flight[0]))
+    else:
+        return JsonResponse({"error": "No flight in DB with such flight_id."})
 
 
 def home(request):

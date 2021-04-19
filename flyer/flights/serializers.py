@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Date, Flight
+from .tasks import ROUTES
 
 
 class FlightSerializer(serializers.ModelSerializer):
@@ -17,8 +18,6 @@ class DateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_cheapest_flights(self, obj):
-        from .views import ROUTES
-
         cheapest_flights = []
 
         for route in ROUTES:

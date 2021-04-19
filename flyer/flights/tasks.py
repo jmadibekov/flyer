@@ -28,7 +28,7 @@ API_KEY = "A5VqFeOZvXoOfy5zY19vBuWO4b4TJL23"
 DATE_FROM = timezone.now()
 DATE_FROM_STR = DATE_FROM.strftime("%d/%m/%Y")
 
-INTERVAL = timedelta(days=2)
+INTERVAL = timedelta(days=30)
 
 DATE_TO = DATE_FROM + INTERVAL
 DATE_TO_STR = DATE_TO.strftime("%d/%m/%Y")
@@ -52,10 +52,10 @@ class CityCode(Enum):
 def common_routes():
     routes = [
         (CityCode.ALA, CityCode.TSE),
-        # (CityCode.ALA, CityCode.MOW),
-        # (CityCode.ALA, CityCode.CIT),
-        # (CityCode.TSE, CityCode.MOW),
-        # (CityCode.TSE, CityCode.LED),
+        (CityCode.ALA, CityCode.MOW),
+        (CityCode.ALA, CityCode.CIT),
+        (CityCode.TSE, CityCode.MOW),
+        (CityCode.TSE, CityCode.LED),
     ]
     list_routes = []
     for route in routes:
@@ -96,7 +96,7 @@ def update_flight(flight):
             CHECK_FLIGHTS_API,
             params={
                 "booking_token": flight.booking_token,
-                "bnum": 1,
+                "bnum": 0,
                 "pnum": 1,
             },
             headers={"apikey": API_KEY},
@@ -129,6 +129,8 @@ def update_flight(flight):
 
 @shared_task
 def check_flights():
+    print("Celery worker started the task [check_flights].")
+    print(f"There are {Flight.objects.all().count()} flights to update.")
     for flight in Flight.objects.order_by("utc_departure"):
         update_flight(flight)
 
