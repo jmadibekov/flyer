@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+from celery.schedules import crontab
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -144,6 +146,14 @@ CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 # Celery actually uses Django's USE_TZ setting, but the following is required
 # for the flower to be in local timezone
 CELERY_TIMEZONE = "Asia/Almaty"
+
+CELERY_BEAT_SCHEDULE = {
+    "sample_task": {
+        "task": "flights.tasks.sample_task",
+        "schedule": crontab(minute="*/1"),
+        "args": (10,),  # 10 secs
+    }
+}
 
 
 # DRF settings
