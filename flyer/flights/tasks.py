@@ -93,8 +93,10 @@ def fetch_flights():
     Date.objects.all().delete()
 
     print(
-        f"Requesting flight info from external API from {DATE_FROM_STR} to {DATE_TO_STR}."
+        f"Requesting flight info from external API \
+            from {DATE_FROM_STR} to {DATE_TO_STR}."
     )
+
     for route in ROUTES:
         fly_from, fly_to = route["fly_from"], route["fly_to"]
         flights = request_flights(fly_from, fly_to, DATE_FROM_STR, DATE_TO_STR)["data"]
