@@ -35,9 +35,9 @@ DATE_TO_STR = DATE_TO.strftime("%d/%m/%Y")
 
 LIMIT = 5000
 
-# for each date and route, I store only up to 50 flights (starting from cheapest);
+# for each date and route, I store only up to 5 flights (starting from cheapest);
 # for one, I think that's more than enough; secondly, it'll be faster performance-wise
-MAX_NUM_OF_FLIGHTS_FOR_DAY_PER_ROUTE = 50
+MAX_NUM_OF_FLIGHTS_FOR_DAY_PER_ROUTE = 5
 
 
 class CityCode(Enum):
