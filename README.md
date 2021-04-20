@@ -43,8 +43,8 @@ every 3 hours. You can also call it manually at [http://localhost:1337/check/](h
 
 - **Django and DRF:** The main web-frameworks the app uses to produce RESTful APIs.
 
-- **Celery and Celery Beat:** Celery is used asynchronously exec IO bound work in the background. Celery Beat is used as scheduler
-  so that tasks are automatically run regularly.
+- **Celery and Celery Beat:** Celery is used to asynchronously execute IO bound work in the background. Celery Beat is
+  used as a scheduler so that tasks are automatically run regularly.
 
 - **Redis:** Redis is used as a message broker between Celery workers and web application.
 
@@ -61,3 +61,11 @@ The app far from being ready to be deployed to production. Following is the list
 - Frontend part (probably with React).
 - Divide the IO bound tasks to multiple isolated parts so that multiple celery workers can pick them up and run concurrently.
 - Add tests and use TDD approach.
+
+## Raising Issues
+
+At the time of writing this, everything was working perfectly on my computer. That being said, I understand some
+might face unexpected errors or difficulties to run the app eventually.
+
+So please feel free to raise an issue with the problem that you faced (I'll answer all of them) or contact me via
+[email](mailto:madibekov.nurbakhyt@gmail.com).
